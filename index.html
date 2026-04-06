@@ -7,57 +7,7 @@
     <title>toe-tac-tic</title>
   </head>
   <body>
-    <svg
-      id="svg"
-      width="128px"
-      height="128px"
-      viewBox="0 0 128 128"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      xml:space="preserve"
-      xmlns:serif="http://www.serif.com/"
-      style="
-        fill-rule: evenodd;
-        clip-rule: evenodd;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      "
-    >
-      <path
-        id="x"
-        d="M9.119,9.119L64,64L118.881,9.119L64,64L118.881,118.881L64,64L9.119,118.881L64,64"
-        style="fill: none; stroke: black; stroke-width: 16px"
-      />
-      <circle
-        id="circle"
-        cx="64"
-        cy="64"
-        r="54.517"
-        style="fill: none; stroke: none; stroke-width: 16px"
-      />
-    </svg>
-
-    <svg
-      id="gradient"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 100 100"
-      fill="none"
-    >
-      <defs>
-        <linearGradient
-          id="grad"
-          x1="0"
-          y1="0"
-          x2="99"
-          y2="99"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop offset="0.2" stop-color="rgb(255, 135, 9)" />
-          <stop offset="0.7" stop-color="rgb(247, 189, 248)" />
-        </linearGradient>
-      </defs>
-    </svg>
+    <canvas id="ttt" width="512" height="512"></canvas>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/CustomEase.min.js"></script>
