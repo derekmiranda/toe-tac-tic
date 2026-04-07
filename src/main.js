@@ -65,6 +65,11 @@ function handleMouseUp(e) {
   const { cellId } = e.target.dataset;
   const index = parseInt(cellId[1]);
   const cellState = cellStates[index];
+
+  if (cellState.lockedIn) {
+    return;
+  }
+
   const rect = svgEls[index].getBoundingClientRect();
 
   cellState.lockedIn = true;
