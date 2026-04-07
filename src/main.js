@@ -1,5 +1,9 @@
 import "./style.css";
-import { howCenteredIsPoint } from "./utils";
+import {
+  getRectCenter,
+  getAngleBetweenTwoPoints,
+  howCenteredIsPoint,
+} from "./utils";
 
 const root = document.getElementById("root");
 const svgEls = [];
@@ -8,11 +12,13 @@ const cellStates = [];
 const tweens = [];
 const CELL_NUM = 9;
 const CELL_LEN = 128;
+const PROGRESS_SPEED = 1;
 const SVG_STYLE =
   "fill-rule: evenodd; clip-rule: evenodd; stroke-linejoin: round; stroke-miterlimit: 2;";
 const PATH_D =
   "M36.103,64L11.398,39.294L39.294,11.398L64,36.103L88.706,11.398L116.602,39.294L91.897,64L116.602,88.706L88.706,116.602L64,91.897L39.294,116.602L11.398,88.706L36.103,64Z";
 const X_PATH_STYLE = "fill: none; stroke: black";
+const INITIAL_OPACITY = 0.2;
 
 let svgGrid;
 
@@ -30,15 +36,16 @@ let svgGrid;
     tweens.push(createMorphTween(i, shapeIndex));
   }
 
-  svgGrid.addEventListener("mousemove", handleCanvasMouseMove);
+  root.addEventListener("mousemove", handleMouseMove);
 })();
 
-function handleCanvasMouseMove(e) {
-  const rect = e.target.getBoundingClientRect();
-  const progress = (e.clientX - rect.left) / rect.width;
-
+function handleMouseMove(e) {
   for (let i = 0; i < tweens.length; i++) {
+    const svgEl = svgEls[i];
     const tween = tweens[i];
+    const rect = svgEl.getBoundingClientRect();
+    const progress = (e.clientX - rect.left) / rect.width;
+
     tween.progress(progress);
     const centeredPercent = howCenteredIsPoint(rect, e.clientX, e.clientY);
     pathEls[i].style.stroke = `rgba(0,0,0,${centeredPercent})`;
@@ -71,6 +78,7 @@ function createXSvg(parent, id) {
   xPath.setAttribute("id", id);
   xPath.setAttribute("d", PATH_D);
   xPath.setAttribute("style", X_PATH_STYLE);
+  xPath.style.stroke = `rgba(0,0,0,${INITIAL_OPACITY})`;
 
   svg.appendChild(xPath);
   parent.appendChild(svg);
@@ -87,10 +95,7 @@ function createMorphTween(index, shapeIndex) {
       },
       duration: 2,
       repeat: -1,
-      ease: CustomEase.create(
-        "custom",
-        "M0,0 C0,0 0.071,0.285 0.116,0.3 0.155,0.313 0.466,0.476 0.5,0.5 0.533,0.524 0.86,0.657 0.882,0.706 0.905,0.759 1,1 1,1 ",
-      ),
+      ease: "expo.inOut",
       yoyo: true,
     })
     .play(0)
