@@ -1,9 +1,5 @@
 import "./style.css";
-import {
-  getRectCenter,
-  getAngleBetweenTwoPoints,
-  howCenteredIsPoint,
-} from "./utils";
+import { howCenteredIsPoint } from "./utils";
 
 const root = document.getElementById("root");
 const svgEls = [];
@@ -12,7 +8,6 @@ const cellStates = [];
 const tweens = [];
 const CELL_NUM = 9;
 const CELL_LEN = 128;
-const PROGRESS_SPEED = 1;
 const SVG_STYLE =
   "fill-rule: evenodd; clip-rule: evenodd; stroke-linejoin: round; stroke-miterlimit: 2;";
 const PATH_D =
@@ -37,19 +32,46 @@ let svgGrid;
   }
 
   root.addEventListener("mousemove", handleMouseMove);
+  root.addEventListener("mouseup", handleMouseUp);
 })();
+
+function getCellProgress(rect, x) {
+  return (x - rect.left) / rect.width;
+}
 
 function handleMouseMove(e) {
   for (let i = 0; i < tweens.length; i++) {
+    const { lockedIn } = cellStates[i];
+    if (lockedIn) {
+      continue;
+    }
+
     const svgEl = svgEls[i];
     const tween = tweens[i];
     const rect = svgEl.getBoundingClientRect();
-    const progress = (e.clientX - rect.left) / rect.width;
+    const progress = getCellProgress(rect, e.clientX);
 
     tween.progress(progress);
     const centeredPercent = howCenteredIsPoint(rect, e.clientX, e.clientY);
     pathEls[i].style.stroke = `rgba(0,0,0,${centeredPercent})`;
   }
+}
+
+function handleMouseUp(e) {
+  if (!e.target?.dataset.cellId) {
+    return;
+  }
+
+  const { cellId } = e.target.dataset;
+  const index = parseInt(cellId[1]);
+  const cellState = cellStates[index];
+  const rect = svgEls[index].getBoundingClientRect();
+
+  cellState.lockedIn = true;
+  cellState.progress = getCellProgress(rect, e.clientX);
+
+  tweens[index].progress(cellState.progress);
+  pathEls[index].style.stroke = `rgba(0,0,0,${1})`;
 }
 
 function createCellState({ index, progress = 0, opacity = 1, shapeIndex }) {
@@ -58,6 +80,7 @@ function createCellState({ index, progress = 0, opacity = 1, shapeIndex }) {
     progress,
     opacity,
     shapeIndex,
+    lockedIn: false,
   };
 }
 
@@ -73,6 +96,7 @@ function createXSvg(parent, id) {
     "xmlns:xlink",
     "http://www.w3.org/1999/xlink",
   );
+  svg.dataset.cellId = id;
 
   const xPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
   xPath.setAttribute("id", id);
