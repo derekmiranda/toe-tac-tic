@@ -1,0 +1,10 @@
+.ttt-grid {
+  display: grid;
+  background-color: pink;
+  width: 100%;
+  grid-template-columns: 128px 128px 128px;
+}
+
+.cell-svg {
+  border: 1px solid black;
+}
