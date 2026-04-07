@@ -22,5 +22,6 @@ export function distanceFromCenter(rect, x, y) {
 
 export function howCenteredIsPoint(rect, x, y) {
   const dist = distanceFromCenter(rect, x, y);
-  return (rect.width - dist) / rect.width;
+  const shorterAxis = Math.min(rect.width, rect.height);
+  return (shorterAxis - dist) / shorterAxis;
 }

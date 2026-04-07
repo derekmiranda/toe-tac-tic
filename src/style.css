@@ -1,10 +1,20 @@
+#root,
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 .ttt-grid {
   display: grid;
   background-color: pink;
   width: 100%;
-  grid-template-columns: 128px 128px 128px;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 0;
 }
 
 .cell-svg {
   border: 1px solid black;
+  width: 100%;
+  height: 100%;
 }

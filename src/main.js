@@ -69,6 +69,7 @@ function handleMouseUp(e) {
 
   cellState.lockedIn = true;
   cellState.progress = getCellProgress(rect, e.clientX);
+  cellState.clickPoint = [e.clientX, e.clientY];
 
   tweens[index].progress(cellState.progress);
   pathEls[index].style.stroke = `rgba(0,0,0,${1})`;
@@ -81,6 +82,7 @@ function createCellState({ index, progress = 0, opacity = 1, shapeIndex }) {
     opacity,
     shapeIndex,
     lockedIn: false,
+    clickPoint: null,
   };
 }
 
