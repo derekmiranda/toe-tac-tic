@@ -5,6 +5,7 @@ const root = document.getElementById("root");
 const svgEls = [];
 const pathEls = [];
 const cellStates = [];
+const clickOrder = [];
 const tweens = [];
 const CELL_NUM = 9;
 const CELL_LEN = 128;
@@ -77,9 +78,12 @@ function handleMouseUp(e) {
   cellState.lockedIn = true;
   cellState.progress = getCellProgress(rect, e.clientX);
   cellState.clickPoint = [e.clientX, e.clientY];
+  clickOrder.push(cellState);
 
   tweens[index].progress(cellState.progress);
   pathEls[index].style.stroke = `rgba(0,0,0,${1})`;
+
+  handleAllCellsLockedIn();
 }
 
 function setUpCanvas() {
@@ -146,4 +150,26 @@ function createMorphTween(index, shapeIndex) {
     })
     .play(0)
     .pause();
+}
+
+function handleAllCellsLockedIn() {
+  const allCellsLockedIn =
+    clickOrder.length === CELL_NUM &&
+    clickOrder.every((state) => state.lockedIn);
+  if (!allCellsLockedIn) return;
+
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+
+  clickOrder.forEach((state, i) => {
+    const { clickPoint } = state;
+
+    if (i === 0) {
+      ctx.moveTo(clickPoint[0], clickPoint[1]);
+    } else {
+      ctx.lineTo(clickPoint[0], clickPoint[1]);
+    }
+  });
+
+  ctx.stroke();
 }
