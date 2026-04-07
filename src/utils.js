@@ -25,3 +25,11 @@ export function howCenteredIsPoint(rect, x, y) {
   const shorterAxis = Math.min(rect.width, rect.height);
   return (shorterAxis - dist) / shorterAxis;
 }
+
+export function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}

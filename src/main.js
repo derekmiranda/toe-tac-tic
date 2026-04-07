@@ -1,5 +1,5 @@
 import "./style.css";
-import { howCenteredIsPoint } from "./utils";
+import { debounce, howCenteredIsPoint } from "./utils";
 
 const root = document.getElementById("root");
 const svgEls = [];
@@ -15,12 +15,14 @@ const PATH_D =
 const X_PATH_STYLE = "fill: none; stroke: black";
 const INITIAL_OPACITY = 0.2;
 
-let svgGrid;
+let svgGrid, canvas, ctx;
 
 (function main() {
   svgGrid = document.createElement("div");
   svgGrid.classList.add("ttt-grid");
   root.appendChild(svgGrid);
+
+  setUpCanvas();
 
   for (let i = 0; i < CELL_NUM; i++) {
     const shapeIndex = Math.random() * 10;
@@ -78,6 +80,19 @@ function handleMouseUp(e) {
 
   tweens[index].progress(cellState.progress);
   pathEls[index].style.stroke = `rgba(0,0,0,${1})`;
+}
+
+function setUpCanvas() {
+  canvas = document.getElementById("canvas");
+  ctx = canvas.getContext("2d");
+
+  resizeCanvas();
+  window.addEventListener("resize", debounce(resizeCanvas, 1));
+}
+
+function resizeCanvas() {
+  canvas.width = document.body.offsetWidth;
+  canvas.height = document.body.offsetHeight;
 }
 
 function createCellState({ index, progress = 0, opacity = 1, shapeIndex }) {
