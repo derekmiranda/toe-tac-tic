@@ -10,6 +10,7 @@ body {
   top: 0;
   left: 0;
   pointer-events: none;
+  z-index: -1;
 }
 
 #gradient {
@@ -23,7 +24,6 @@ body {
   height: 100vh;
   grid-template-columns: 1fr 1fr 1fr;
   margin: 0;
-  background: rgb(103, 116, 138);
 }
 
 .cell-svg {

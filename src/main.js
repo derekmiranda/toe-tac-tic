@@ -99,6 +99,7 @@ function setUpCanvas() {
   ctx = canvas.getContext("2d");
 
   resizeCanvas();
+  resetCanvas();
   window.addEventListener("resize", debounce(resizeCanvas, 1));
 }
 
@@ -162,12 +163,18 @@ function createMorphTween(index, shapeIndex) {
     .pause();
 }
 
+function resetCanvas() {
+  ctx.fillStyle = "#67748a";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
 function handleAllCellsLockedIn() {
   const allCellsLockedIn =
     clickOrder.length === CELL_NUM &&
     clickOrder.every((state) => state.lockedIn);
   if (!allCellsLockedIn) return;
 
+  resetCanvas();
   ctx.beginPath();
   ctx.lineWidth = 2;
 
