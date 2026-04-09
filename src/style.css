@@ -9,7 +9,12 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: -1;
+  pointer-events: none;
+}
+
+#gradient {
+  width: 0;
+  height: 0;
 }
 
 .ttt-grid {
@@ -18,6 +23,7 @@ body {
   height: 100vh;
   grid-template-columns: 1fr 1fr 1fr;
   margin: 0;
+  background: rgb(103, 116, 138);
 }
 
 .cell-svg {
